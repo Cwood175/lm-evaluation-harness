@@ -69,10 +69,12 @@ class HFLM(TemplateLM):
         # override whether the model should be treated as decoder-only (causal) or encoder-decoder (seq2seq)
         revision: str | None = "main",
         subfolder: str = "",
-        tokenizer: str
-        | transformers.PreTrainedTokenizer
-        | transformers.PreTrainedTokenizerFast
-        | None = None,
+        tokenizer: (
+            str
+            | transformers.PreTrainedTokenizer
+            | transformers.PreTrainedTokenizerFast
+            | None
+        ) = None,
         truncation: bool | None = False,
         logits_cache: bool = True,
         max_length: int | None = None,
@@ -682,11 +684,13 @@ class HFLM(TemplateLM):
                 raise AssertionError("load_in_4bit requires peft >= 0.4.0")
 
             # Compatible with Gemma3 (multimodal) and old models
-            if hasattr(self._model.config, "text_config") and hasattr(self._model.config.text_config, "vocab_size"):
+            if hasattr(self._model.config, "text_config") and hasattr(
+                self._model.config.text_config, "vocab_size"
+            ):
                 vocab_size = self._model.config.text_config.vocab_size
             else:
                 vocab_size = self._model.config.vocab_size
-            
+
             if vocab_size != len(self.tokenizer):
                 # resize model for LoRAs with added tokens
                 eval_logger.info(
@@ -859,7 +863,7 @@ class HFLM(TemplateLM):
         if add_special_tokens is None:
             if self.backend == "causal":
                 special_tokens_kwargs = {
-                    "add_special_tokens": False or self.add_bos_token
+                    "add_special_tokens": False or self.add_bos_token,
                 }
         # otherwise the method explicitly defines the value
         else:
@@ -1151,9 +1155,9 @@ class HFLM(TemplateLM):
         re_ord = Collator(
             requests,
             sort_fn=_collate,
-            group_by="contexts"
-            if self.backend == "causal" and self.logits_cache
-            else None,
+            group_by=(
+                "contexts" if self.backend == "causal" and self.logits_cache else None
+            ),
             group_fn=_lookup_one_token_cont,
         )
 

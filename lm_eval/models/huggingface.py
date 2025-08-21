@@ -182,9 +182,9 @@ class HFLM(TemplateLM):
             )
 
             # determine which of 'causal' and 'seq2seq' backends to use for HF models
-        self._get_backend(
-            config=self.config, backend=backend, trust_remote_code=trust_remote_code
-        )
+            self._get_backend(
+                config=self.config, backend=backend, trust_remote_code=trust_remote_code
+            )
 
         # load tokenizer so we know tokenizer vocabulary size before loading model and PEFT
         self._create_tokenizer(
@@ -686,7 +686,7 @@ class HFLM(TemplateLM):
                 vocab_size = self._model.config.text_config.vocab_size
             else:
                 vocab_size = self._model.config.vocab_size
-            
+
             if vocab_size != len(self.tokenizer):
                 # resize model for LoRAs with added tokens
                 eval_logger.info(

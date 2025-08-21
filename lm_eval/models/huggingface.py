@@ -1005,7 +1005,7 @@ class HFLM(TemplateLM):
             )
             # discard right-padding.
             # also discard the input/context tokens. we'll only score continuations.
-            logits = logits[inplen - contlen : inplen]
+            logits = logits[inplen - contlen: inplen]
         elif self.backend == "seq2seq":
             assert contlen and not inplen, (
                 "Selecting scored logits for Seq2SeqLM requires only cont. len"
@@ -1218,7 +1218,7 @@ class HFLM(TemplateLM):
                             f"Truncating {total_length - self.max_length + 1} tokens from the left."
                         )
                     inp = torch.tensor(
-                        (context_enc + continuation_enc)[-(self.max_length + 1) :][:-1],
+                        (context_enc + continuation_enc)[-(self.max_length + 1):][:-1],
                         dtype=torch.long,
                         device=self.device,
                     )

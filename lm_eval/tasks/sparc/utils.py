@@ -254,6 +254,8 @@ def extract_solution_path(
             point = {"x": int(x), "y": int(y)}
             path.append(point)
 
+    return path
+
             # Stop extracting if we've reached the end point
             if (
                 end_point

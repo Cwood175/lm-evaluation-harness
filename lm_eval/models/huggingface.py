@@ -529,8 +529,8 @@ class HFLM(TemplateLM):
             else:
                 if not trust_remote_code:
                     eval_logger.warning(
-                        "HF model type is neither marked as CausalLM or Seq2SeqLM. \
-                    This is expected if your model requires `trust_remote_code=True` but may be an error otherwise."
+                        "HF model type is neither marked as CausalLM or Seq2SeqLM. "
+                        "This is expected if your model requires `trust_remote_code=True` but may be an error otherwise."
                         "Setting backend to causal"
                     )
                 # if model type is neither in HF transformers causal or seq2seq model registries
@@ -682,11 +682,13 @@ class HFLM(TemplateLM):
                 raise AssertionError("load_in_4bit requires peft >= 0.4.0")
 
             # Compatible with Gemma3 (multimodal) and old models
-            if hasattr(self._model.config, "text_config") and hasattr(self._model.config.text_config, "vocab_size"):
+            if hasattr(self._model.config, "text_config") and hasattr(
+                self._model.config.text_config, "vocab_size"
+            ):
                 vocab_size = self._model.config.text_config.vocab_size
             else:
                 vocab_size = self._model.config.vocab_size
-            
+
             if vocab_size != len(self.tokenizer):
                 # resize model for LoRAs with added tokens
                 eval_logger.info(
